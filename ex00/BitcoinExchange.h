@@ -9,12 +9,12 @@
 #include <iomanip>
 
 #define SSTR( x ) static_cast< std::ostringstream & >( \
-	( std::ostringstream() << std::dec << std::setfill('0') << std::setw(2) << x ) ).str()
+    ( std::ostringstream() << std::dec << std::setfill('0') << std::setw(2) << x ) ).str()
 
 struct LineInfo
 {
-	std::string mDate;
-	float mValue;
+    std::string mDate;
+    float mValue;
 };
 
 class BitcoinExchange
@@ -34,15 +34,15 @@ public:
 private:
 
     static const std::string mDatabaseFilePath;
-	std::string mFirstDate;
+    std::string mFirstDate;
     std::map< std::string, float > mBitcoinCurrency;
 
     bool IsValidDate( const std::string& prDate );
     bool IsValidValue( float pValue );
 
-	LineInfo GetLineInfo( const std::string& prLine );
+    LineInfo GetLineInfo( const std::string& prLine );
 
-	void AddData( const LineInfo& prNewInfo, const LineInfo& prLastInfo );
+    void AddData( const LineInfo& prNewInfo, const LineInfo& prLastInfo );
     std::string GetNextDay( const std::string& prDate );
 };
 

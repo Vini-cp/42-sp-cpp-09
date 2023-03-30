@@ -10,24 +10,24 @@ class RPN
 {
 public:
 
-	RPN();
+    RPN();
     RPN( const std::string& prExpression );
     RPN( const RPN& prRPN );
     ~RPN();
 
-	void SetExpression( const std::string& prExpression );
+    void SetExpression( const std::string& prExpression );
 
     RPN& operator=( const RPN& prRPN );
 
     bool IsExpressionValid();
 
-	int Calculate();
+    int Calculate();
 
 private:
 
     std::string mExpression;
 
-	bool IsOperatorSymbol( char c );
+    bool IsOperatorSymbol( char c );
 };
 
 #endif

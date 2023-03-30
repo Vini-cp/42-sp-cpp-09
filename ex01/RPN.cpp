@@ -45,7 +45,7 @@ RPN& RPN::operator=( const RPN& prRPN )
 
 void RPN::SetExpression( const std::string& prExpression )
 {
-	mExpression = prExpression;
+    mExpression = prExpression;
 }
 
 // ----------------------------------------------------------------------------
@@ -59,14 +59,14 @@ bool RPN::IsExpressionValid()
     {
         if ( i % 2 != 0 ) // odd numbers
         {
-			// It must have an empty every other espace bc the numbers
-			// used in this operation will always be integers less than 10.
+            // It must have an empty every other espace bc the numbers
+            // used in this operation will always be integers less than 10.
             if ( mExpression[ i ] != ' ' ) return false;
         }
 
         if ( i > 2 && i % 2 == 0 ) // all even after the two first digits
         {
-			// We must find alternately: operators and digits
+            // We must find alternately: operators and digits
             if ( ( i / 2 ) % 2 == 0 )
             {
                 if ( !IsOperatorSymbol( mExpression[ i ] ) ) return false;
@@ -143,7 +143,7 @@ int RPN::Calculate()
 
 bool RPN::IsOperatorSymbol( char c )
 {
-	// We only handle basic operators
+    // We only handle basic operators
     return c == '+' || c == '-' || c == '/' || c == '*';
 }
 

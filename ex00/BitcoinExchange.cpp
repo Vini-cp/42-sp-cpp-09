@@ -51,19 +51,19 @@ bool BitcoinExchange::PopulateDatabase()
     if( lDatabaseFile.is_open() )
     {
         std::string lLine;
-		std::getline( lDatabaseFile, lLine ); // First line: header
-		std::getline( lDatabaseFile, lLine );
+        std::getline( lDatabaseFile, lLine ); // First line: header
+        std::getline( lDatabaseFile, lLine );
 
-		LineInfo lInfo = GetLineInfo( lLine );
+        LineInfo lInfo = GetLineInfo( lLine );
         while( std::getline( lDatabaseFile, lLine ) )
         {
-			LineInfo lNextInfo = GetLineInfo( lLine );
+            LineInfo lNextInfo = GetLineInfo( lLine );
 
-			AddData( lInfo, lNextInfo );
-			lInfo = lNextInfo;
+            AddData( lInfo, lNextInfo );
+            lInfo = lNextInfo;
         }
 
-		AddData( lInfo, lInfo ); // Add last data
+        AddData( lInfo, lInfo ); // Add last data
 
         return true;
     }
@@ -112,18 +112,18 @@ static bool IsLeap( int pYear )
 
 bool BitcoinExchange::IsValidDate( const std::string& prDate )
 {
-	if ( prDate.length() != 10 ) return false;
+    if ( prDate.length() != 10 ) return false;
 
-	for ( int i = 0; i < (int)prDate.length(); ++i )
-	{
-		if ( i == 4 || i == 7 )
-		{
-			if ( prDate[ i ] != '-' ) return false; // Date delimiter
-			continue;
-		}
+    for ( int i = 0; i < (int)prDate.length(); ++i )
+    {
+        if ( i == 4 || i == 7 )
+        {
+            if ( prDate[ i ] != '-' ) return false; // Date delimiter
+            continue;
+        }
 
-		if ( !isdigit( prDate[ i ] ) ) return false;
-	}
+        if ( !isdigit( prDate[ i ] ) ) return false;
+    }
 
     int lYear = atoi( prDate.substr( 0, 4 ).c_str() );
     int lMonth = atoi( prDate.substr( 5, 2 ).c_str() );
@@ -175,91 +175,91 @@ bool BitcoinExchange::IsValidValue( float pValue )
 
 LineInfo BitcoinExchange::GetLineInfo( const std::string& prLine )
 {
-	int lDelimiterPos = prLine.find( ',' );
+    int lDelimiterPos = prLine.find( ',' );
 
-	LineInfo lInfo;
+    LineInfo lInfo;
 
-	lInfo.mDate = prLine.substr( 0, lDelimiterPos );
-	lInfo.mValue = atof( prLine.substr( lDelimiterPos + 1, prLine.length() - lDelimiterPos ).c_str() );
+    lInfo.mDate = prLine.substr( 0, lDelimiterPos );
+    lInfo.mValue = atof( prLine.substr( lDelimiterPos + 1, prLine.length() - lDelimiterPos ).c_str() );
 
-	return lInfo;
+    return lInfo;
 }
 
 // ----------------------------------------------------------------------------
 
 void BitcoinExchange::AddData( const LineInfo& prInfo, const LineInfo& prNextInfo )
 {
-	if ( mBitcoinCurrency.empty() || prInfo.mDate == prNextInfo.mDate )
-	{
-		mBitcoinCurrency.insert( std::pair< std::string, float >( prInfo.mDate, prInfo.mValue ) );
-		return;
-	}
+    if ( mBitcoinCurrency.empty() || prInfo.mDate == prNextInfo.mDate )
+    {
+        mBitcoinCurrency.insert( std::pair< std::string, float >( prInfo.mDate, prInfo.mValue ) );
+        return;
+    }
 
-	std::string lDate = prInfo.mDate;
-	std::string lNextDate = prNextInfo.mDate;
+    std::string lDate = prInfo.mDate;
+    std::string lNextDate = prNextInfo.mDate;
 
-	while ( lDate != lNextDate )
-	{
-		mBitcoinCurrency.insert( std::pair< std::string, float >( lDate, prInfo.mValue ) );
-		lDate = GetNextDay( lDate );
-	}
+    while ( lDate != lNextDate )
+    {
+        mBitcoinCurrency.insert( std::pair< std::string, float >( lDate, prInfo.mValue ) );
+        lDate = GetNextDay( lDate );
+    }
 }
 
 // ----------------------------------------------------------------------------
 
 std::string BitcoinExchange::GetNextDay( const std::string& prDate )
 {
-	int lYear = atoi( prDate.substr( 0, 4 ).c_str() );
+    int lYear = atoi( prDate.substr( 0, 4 ).c_str() );
     int lMonth = atoi( prDate.substr( 5, 2 ).c_str() );
     int lDay = atoi( prDate.substr( 8, 2 ).c_str() );
 
     lDay++;
 
-	// Handle February with leap year
+    // Handle February with leap year
     if ( lMonth == 2 )
     {
         if ( IsLeap( lYear ) )
-		{
-			if ( lDay == 30 )
-			{
-				lDay = 1;
-				lMonth++;
-			}
-		}
-		else
-		{
-			if ( lDay == 29 )
-			{
-				lDay = 1;
-				lMonth++;
-			}
-		}
+        {
+            if ( lDay == 30 )
+            {
+                lDay = 1;
+                lMonth++;
+            }
+        }
+        else
+        {
+            if ( lDay == 29 )
+            {
+                lDay = 1;
+                lMonth++;
+            }
+        }
     }
-	else if ( lMonth == 4 || lMonth == 6 || lMonth == 9 || lMonth == 11 )
-	{
-		if ( lDay == 31 )
-		{
-			lDay = 1;
-			lMonth++;
-		}
-	}
-	else if ( lMonth == 12 )
-	{
-		if ( lDay == 32 )
-		{
-			lDay = 1;
-			lMonth = 1;
-			lYear++;
-		}
-	}
-	else
-	{
-		if ( lDay == 32 )
-		{
-			lDay = 1;
-			lMonth++;
-		}
-	}
+    else if ( lMonth == 4 || lMonth == 6 || lMonth == 9 || lMonth == 11 )
+    {
+        if ( lDay == 31 )
+        {
+            lDay = 1;
+            lMonth++;
+        }
+    }
+    else if ( lMonth == 12 )
+    {
+        if ( lDay == 32 )
+        {
+            lDay = 1;
+            lMonth = 1;
+            lYear++;
+        }
+    }
+    else
+    {
+        if ( lDay == 32 )
+        {
+            lDay = 1;
+            lMonth++;
+        }
+    }
 
     std::stringstream lYearStr;
     lYearStr << lYear;
